@@ -1,14 +1,9 @@
 package com.wodder.authentication;
 
-import com.wodder.gui.LoginDialog;
-import com.wodder.model.users.ManagementUser;
-import com.wodder.model.users.RegularUser;
-import com.wodder.model.users.User;
-import org.apache.commons.lang3.tuple.Pair;
+import com.wodder.model.users.*;
+import org.apache.commons.lang3.tuple.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class InMemory extends AccessManager {
 
@@ -16,16 +11,9 @@ public class InMemory extends AccessManager {
 
     public InMemory() {
         db = new HashMap<>();
-        addUser("iwodder","passw0rd","user");
+        addUser("iwodder","passw0rd","staff");
         addUser("cnobrega","abc123","manager");
 
-    }
-
-    @Override
-    public Credentials getCredentials() {
-        LoginDialog jDialog = new LoginDialog();
-        jDialog.display();
-        return new Credentials(jDialog.getUserName(),jDialog.getPassword());
     }
 
     @Override
@@ -43,7 +31,7 @@ public class InMemory extends AccessManager {
     public User createUser(Credentials credentials) {
         String role = db.get(credentials.getUserName()).getRight();
         switch (role.toLowerCase()){
-            case "user":
+            case "staff":
                 return new RegularUser("First", "Last");
             case "manager":
                 return new ManagementUser("Manager", "Manager");

@@ -1,29 +1,25 @@
-package com.wodder.gui;
+package com.wodder.gui.dialogs;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.ToolTipManager;
-import java.awt.Dialog;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
+import com.wodder.authentication.*;
+import com.wodder.controllers.*;
+import com.wodder.gui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class LoginDialog extends JDialog implements KeyListener {
 
     private JTextField userName;
     private JPasswordField password;
     private JButton ok;
+    private Frame owner;
+    private SystemController controller;
 
-    public LoginDialog() {
-        super((Dialog) null, "Login");
+    public LoginDialog(Frame owner, SystemController controller) {
+        super(owner, "Login");
+        this.owner = owner;
+        this.controller = controller;
         someMethod();
     }
 
@@ -33,9 +29,11 @@ public class LoginDialog extends JDialog implements KeyListener {
         jPanel.add(password(), GuiUtils.createConstraints(0,1,1,1, GridBagConstraints.BOTH, GridBagConstraints.EAST));
         jPanel.add(okBtn(), GuiUtils.createConstraints(0,2,1,1, GridBagConstraints.BOTH, GridBagConstraints.CENTER));
 
+        this.setModal(false);
         this.addKeyListener(this);
-        this.setModal(true);
-        this.add(jPanel);
+        this.setLayout(new BorderLayout());
+        this.add(jPanel, BorderLayout.CENTER);
+        this.pack();
     }
 
     private JPanel userName() {
@@ -62,31 +60,39 @@ public class LoginDialog extends JDialog implements KeyListener {
         JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         ok = new JButton("OK");
         ok.addActionListener(btnListener);
+        ok.addKeyListener(this);
         ok.setFocusable(true);
         jPanel.add(ok);
         return jPanel;
     }
 
     public void display() {
-        this.setLocationRelativeTo(null);
-        this.pack();
+        this.setLocationRelativeTo(owner);
         this.setVisible(true);
+        userName.grabFocus();
     }
 
     public String getUserName() {
-        return userName.getText();
+        String result = userName.getText();
+        userName.setText(null);
+        return result;
     }
 
     public char[] getPassword() {
-        return password.getPassword();
+        char[] pw = password.getPassword();
+        password.setText(null);
+        return pw;
     }
 
     ActionListener btnListener = (e) -> {
-        if (userName.getText().length() == 0 || password.getPassword().length == 0) {
-            this.userName.setToolTipText("Enter username");
-            ToolTipManager.sharedInstance().mouseMoved(new MouseEvent(userName,0,0,0,0,0, 0,false));
+        if (userName.getText().length() == 0 ) {
+            userName.setToolTipText("Enter username");
+            GuiUtils.displayToolTip(userName);
+        } else if (password.getPassword().length == 0) {
+            password.setToolTipText("Enter password");
+            GuiUtils.displayToolTip(password);
         } else {
-            this.setVisible(false);
+            controller.login(new Credentials(getUserName(), getPassword()));
         }
     };
 

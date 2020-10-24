@@ -1,15 +1,12 @@
 package com.wodder.authentication;
 
-import com.wodder.model.users.User;
+import com.wodder.model.users.*;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public abstract class AccessManager {
 
-
-    public final User login() {
-        Credentials c = getCredentials();
+    public final User login(Credentials c) {
         if (validCredentials(c)) {
             User user = createUser(c);
             c.clear();
@@ -29,33 +26,7 @@ public abstract class AccessManager {
         char[] pass = scanner.nextLine().toCharArray();
         return new Credentials(username, pass);
     }
-    abstract boolean validCredentials(Credentials c);
-    abstract User createUser(Credentials c);
-    abstract void addUser(String userName, String password, String role);
-
-    protected static final class Credentials {
-        private String userName;
-        private final char[] password;
-
-        public Credentials(String userName, char[] password) {
-            if (userName == null || password == null) {
-                throw new IllegalArgumentException("Cannot create credentials without proper parameters");
-            }
-            this.userName = userName;
-            this.password = password;
-        }
-
-        public final String getUserName() {
-            return userName;
-        }
-
-        public final char[] getPassword() {
-            return password;
-        }
-
-        private void clear() {
-            Arrays.fill(password, '*');
-            this.userName = "";
-        }
-    }
+    public abstract boolean validCredentials(Credentials c);
+    public abstract User createUser(Credentials c);
+    public abstract void addUser(String userName, String password, String role);
 }

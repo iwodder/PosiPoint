@@ -2,6 +2,7 @@ package com.wodder.model.users;
 
 public class RegularUser extends User {
 
+    private Role role = Role.STAFF;
 
     public RegularUser(String fName, String lName) {
         super(fName, lName);
@@ -13,7 +14,7 @@ public class RegularUser extends User {
     }
 
     @Override
-    public String userName() {
-        return fName + " " + lName;
+    public String roleName() {
+        return role.getRole();
     }
 }

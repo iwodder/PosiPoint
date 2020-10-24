@@ -1,6 +1,8 @@
 package com.wodder.gui;
 
-import java.awt.GridBagConstraints;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public final class GuiUtils {
 
@@ -16,6 +18,12 @@ public final class GuiUtils {
         gbc.gridwidth = width;
         gbc.fill = fill;
         gbc.anchor = anchor;
+        gbc.insets = new Insets(5, 5, 5,5);
         return gbc;
     }
+
+    public static void displayToolTip(Component component) {
+        ToolTipManager.sharedInstance().mouseMoved(new MouseEvent(component, 0, 0, 0, 0, 0, 0, false));
+    }
+
 }
