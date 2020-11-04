@@ -14,7 +14,7 @@ import java.util.*;
 public class SystemController implements UserObserver, ActionListener {
     private final SystemModel systemModel;
     private PosiPoint posiPoint;
-    private MenuDisplay menuDisplay;
+    private ControlDisplay controlDisplay;
     private final Timer logoutTimer;
     private final static int LOGOUT_DELAY_MS = 120_000;
 
@@ -27,8 +27,8 @@ public class SystemController implements UserObserver, ActionListener {
         this.posiPoint = p;
     }
 
-    public void setMenuDisplay(MenuDisplay menuDisplay) {
-        this.menuDisplay = menuDisplay;
+    public void setMenuDisplay(ControlDisplay controlDisplay) {
+        this.controlDisplay = controlDisplay;
     }
 
     public SystemModel getSystemModel() {
@@ -57,14 +57,15 @@ public class SystemController implements UserObserver, ActionListener {
 
     public void addUser(String fName, String lName, String password, String role) {
         systemModel.addUser(fName, lName, password, role);
-        menuDisplay.closeAddUserDialog();
+        controlDisplay.closeAddUserDialog();
     }
 
     @Override
     public void userLoggedOut() {
+        controlDisplay.removeManagerTab();
+        controlDisplay.inactivateMenuBtns();
         posiPoint.displayLoggedOutMsg();
         posiPoint.displayLogin();
-        posiPoint.removeManagerTab();
         logoutTimer.stop();
     }
 
@@ -72,8 +73,9 @@ public class SystemController implements UserObserver, ActionListener {
     public void userLoggedIn(User user) {
         posiPoint.hideLogin();
         if (systemModel.userIsManager()) {
-            posiPoint.addManagerTab();
+            controlDisplay.addManagerTab();
         }
+        controlDisplay.activateMenuBtns();
         logoutTimer.start();
     }
 

@@ -11,7 +11,7 @@ import java.util.*;
 
 public class MenuPanelController implements MenuObserver {
 
-    private MenuDisplay menuDisplay;
+    private ControlDisplay controlDisplay;
     private final MenuModel menuModel;
     private final OrderModel orderModel;
 
@@ -20,24 +20,24 @@ public class MenuPanelController implements MenuObserver {
         this.orderModel = orderModel;
     }
 
-    public void setMenuDisplay(MenuDisplay md) {
-        this.menuDisplay = md;
+    public void setMenuDisplay(ControlDisplay md) {
+        this.controlDisplay = md;
     }
 
     public MenuModel getMenuModel() {
         return this.menuModel;
     }
 
-    public MenuDisplay getMenuDisplay() {
-        return menuDisplay;
+    public ControlDisplay getMenuDisplay() {
+        return controlDisplay;
     }
 
     public void addMenuItem(String name, String price) {
         try {
             menuModel.addMenuItem(new MenuItem(name, price));
-            menuDisplay.closeAddItemDialog();
+            controlDisplay.closeAddItemDialog();
         } catch (Exception e) {
-            new ActionFailedDialog().display(menuDisplay);
+            new ActionFailedDialog().display(controlDisplay);
         }
     }
 

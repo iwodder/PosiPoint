@@ -4,13 +4,12 @@ import com.wodder.controllers.*;
 import com.wodder.gui.observers.*;
 import com.wodder.model.menu.MenuItem;
 import com.wodder.model.menu.*;
-import com.wodder.model.users.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class MenuDisplay extends JTabbedPane implements MenuObserver, UserObserver {
+public class ControlDisplay extends JTabbedPane implements MenuObserver {
     private final MenuPanelController menuPanelController;
     private final SystemController systemController;
     private ManagerPanel managerPanel;
@@ -19,7 +18,7 @@ public class MenuDisplay extends JTabbedPane implements MenuObserver, UserObserv
     private final OrderController orderController;
     private int menuCnt;
 
-    public MenuDisplay(Controllers cf) {
+    public ControlDisplay(Controllers cf) {
         super(JTabbedPane.TOP);
         this.menuPanelController = cf.getMenuPanelController();
         this.menuPanelController.setMenuDisplay(this);
@@ -27,7 +26,6 @@ public class MenuDisplay extends JTabbedPane implements MenuObserver, UserObserv
         this.systemController.setMenuDisplay(this);
         this.menuModel = menuPanelController.getMenuModel();
         this.orderController = cf.getOrderController();
-        menuModel.registerMenuObserver(this);
         menuModel.registerMenuObserver(this);
     }
 
@@ -56,6 +54,14 @@ public class MenuDisplay extends JTabbedPane implements MenuObserver, UserObserv
         }
     }
 
+    public void inactivateMenuBtns() {
+        menuPanel.inactivateButtons();
+    }
+
+    public void activateMenuBtns() {
+        menuPanel.activateButtons();
+    }
+
     public void closeAddItemDialog() {
         managerPanel.hideAddItemDialog();
     }
@@ -82,15 +88,5 @@ public class MenuDisplay extends JTabbedPane implements MenuObserver, UserObserv
             addMenuPanel();
         }
         menuPanel.addItem(mi);
-    }
-
-    @Override
-    public void userLoggedOut() {
-        menuPanel.inactivateButtons();
-    }
-
-    @Override
-    public void userLoggedIn(User user) {
-        menuPanel.activateButtons();
     }
 }

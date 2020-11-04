@@ -17,9 +17,7 @@ public class PosiPoint extends JFrame implements MouseListener, UserObserver {
     private final Controllers controllers;
     private final SystemModel model;
     private LoginDialog loginDialog;
-    private MenuDisplay menuDisplay;
     private OrderDisplay orderPanel;
-    private JPanel menuPanel;
     private JLabel userName;
     private JLabel role;
 
@@ -30,14 +28,12 @@ public class PosiPoint extends JFrame implements MouseListener, UserObserver {
         this.controller.setPosiPoint(this);
         model.registerUserObserver(this);
         model.registerUserObserver(controller);
-        menuDisplay = new MenuDisplay(controllers);
     }
 
     public void createAndShow() {
         setFrameProperties();
-        setupMenuDisplay();
         addComponents();
-        loginDialog = new LoginDialog(this, this.controller);
+        loginDialog = new LoginDialog(this, controller);
         pack();
         setVisible(true);
     }
@@ -51,15 +47,10 @@ public class PosiPoint extends JFrame implements MouseListener, UserObserver {
         setLayout(new BorderLayout());
     }
 
-    private void setupMenuDisplay() {
-        model.registerUserObserver(menuDisplay);
-        menuDisplay.createDisplay();
-        menuDisplay.addMouseListener(this);
-    }
-
     private void addComponents() {
+        add(createUserPanel(), BorderLayout.NORTH);
         add(createOrderPanel(), BorderLayout.EAST);
-        add(createMenuPanel(), BorderLayout.CENTER);
+        add(createControlPanel(), BorderLayout.CENTER);
     }
 
     private JPanel createOrderPanel() {
@@ -69,12 +60,18 @@ public class PosiPoint extends JFrame implements MouseListener, UserObserver {
         return orderPanel;
     }
 
-    private JPanel createMenuPanel() {
-        menuPanel = new JPanel(new BorderLayout(5, 5));
-        menuPanel.add(createUserPanel(), BorderLayout.NORTH);
-        menuPanel.add(menuDisplay, BorderLayout.CENTER);
-        menuPanel.add(orderPanel.orderControls(), BorderLayout.SOUTH);
-        return menuPanel;
+    private JPanel createControlPanel() {
+        JPanel controlPanel = new JPanel(new BorderLayout(5, 5));
+        controlPanel.add(createControls(), BorderLayout.CENTER);
+        controlPanel.add(orderPanel.orderControls(), BorderLayout.SOUTH);
+        return controlPanel;
+    }
+
+    private JTabbedPane createControls() {
+        ControlDisplay result = new ControlDisplay(controllers);
+        result.createDisplay();
+        result.addMouseListener(this);
+        return result;
     }
 
     private JPanel createUserPanel() {
@@ -111,14 +108,6 @@ public class PosiPoint extends JFrame implements MouseListener, UserObserver {
 
     public void hideLogin() {
         loginDialog.setVisible(false);
-    }
-
-    public void addManagerTab() {
-        menuDisplay.addManagerTab();
-    }
-
-    public void removeManagerTab() {
-        menuDisplay.removeManagerTab();
     }
 
     public void displayLoggedOutMsg() {
