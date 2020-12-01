@@ -1,7 +1,9 @@
 package com.wodder.authentication;
 
 import com.wodder.model.users.*;
+import org.apache.commons.lang3.*;
 import org.apache.commons.lang3.tuple.*;
+import org.mindrot.jbcrypt.*;
 
 import java.util.*;
 
@@ -11,8 +13,8 @@ public class InMemory extends AccessManager {
 
     public InMemory() {
         db = new HashMap<>();
-        addUser("iwodder","passw0rd","staff");
-        addUser("cnobrega","abc123","manager");
+        addUser("michael", "scott", "passw0rd", "staff");
+        addUser("jane", "doe", "abc123", "manager");
 
     }
 
@@ -20,8 +22,7 @@ public class InMemory extends AccessManager {
     public boolean validCredentials(Credentials credentials) {
         Pair<String, String> p = db.get(credentials.getUserName());
         if (p != null) {
-            char[] dbP = p.getLeft().toCharArray();
-            return Arrays.equals(dbP, credentials.getPassword());
+            return BCrypt.checkpw(new String(credentials.getPassword()), p.getLeft());
         } else {
             return false;
         }
@@ -41,9 +42,22 @@ public class InMemory extends AccessManager {
     }
 
     @Override
-    public void addUser(String userName, String password, String role) {
+    public void addUser(String fName, String lName, String password, String role) {
+        String userName = createUserName(fName, lName);
         if (!db.containsKey(userName)) {
-            db.put(userName, Pair.of(password, role));
+            db.put(userName, Pair.of(hashPassword(password), role));
+        }
+    }
+
+    private String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    private String createUserName(String fname, String lname) {
+        if (StringUtils.isNoneBlank(fname, lname)) {
+            return fname.toLowerCase().charAt(0) + lname.toLowerCase();
+        } else {
+            throw new IllegalArgumentException("Unable to generate user name");
         }
     }
 }

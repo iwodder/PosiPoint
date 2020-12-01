@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class SystemModelTest {
 
     private SystemModel model;
-    private final Credentials userCreds = new Credentials("iwodder", new char[]{'p','a','s','s','w','0','r','d'});
-    private final Credentials managerCreds = new Credentials("cnobrega", new char[]{'a','b','c','1','2','3'});
+    private final Credentials userCreds = new Credentials("mscott", new char[]{'p','a','s','s','w','0','r','d'});
+    private final Credentials managerCreds = new Credentials("jdoe", new char[]{'a','b','c','1','2','3'});
 
     @BeforeEach
     void setUp() {

@@ -11,7 +11,6 @@ public class InMemory implements OrderStore {
         store = new HashMap<>();
     }
 
-
     @Override
     public void saveOrder(Order order) {
         if (store.containsKey(order.owner())) {

@@ -10,7 +10,7 @@ import java.util.function.*;
 public class SystemModel implements UserSubject {
 
     private User currentUser;
-    private AccessManager accessManager;
+    private final AccessManager accessManager;
     private final ArrayList<UserObserver> userObservers;
 
     public SystemModel() {
@@ -55,8 +55,7 @@ public class SystemModel implements UserSubject {
     }
 
     public void addUser(String fName, String lName, String password, String role) {
-        User u = new UserFactory().createUser(fName, lName, role);
-        accessManager.addUser(u.userName(), password, u.roleName());
+        accessManager.addUser(fName, lName, password, role);
     }
 
     private void updateUserObservers(Consumer<UserObserver> action) {
