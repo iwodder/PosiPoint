@@ -2,7 +2,7 @@ package com.wodder.model.users;
 
 public class RegularUser extends User {
 
-    private Role role = Role.STAFF;
+    private final Role role = Role.STAFF;
 
     public RegularUser(String fName, String lName) {
         super(fName, lName);

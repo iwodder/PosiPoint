@@ -51,7 +51,7 @@ public class SystemModel implements UserSubject {
     }
 
     public Iterator<String> getRoleNames() {
-        return User.getRoles();
+        return Role.getRoles();
     }
 
     public void addUser(String fName, String lName, String password, String role) {

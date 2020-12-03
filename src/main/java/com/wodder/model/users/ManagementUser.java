@@ -2,7 +2,7 @@ package com.wodder.model.users;
 
 public class ManagementUser extends User {
 
-    private Role role = Role.MANAGER;
+    private final Role role = Role.MANAGER;
 
     public ManagementUser(String fName, String lName) {
         super(fName, lName);

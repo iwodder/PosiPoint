@@ -1,48 +1,51 @@
 package com.wodder.model.users;
 
-import java.util.*;
+import org.apache.commons.lang3.*;
 
 public abstract class User implements Cloneable {
 
-    protected final String fName;
-    protected final String lName;
-
-    public enum Role {
-        STAFF("Staff"),
-        MANAGER("Manager");
-
-        private final String name;
-
-        Role(String s) {
-            this.name = s;
-        }
-
-        protected String getRole() {
-            return this.name;
-        }
-    }
-
-    public static Iterator<String> getRoles() {
-        List<String> names = new ArrayList<>();
-        for (Role r : Role.values()) {
-            names.add(r.name);
-        }
-        return names.iterator();
-    }
+    protected long id;
+    protected String fName;
+    protected String lName;
+    protected String userName;
 
     public User(String fName, String lName) {
         this.fName = fName;
         this.lName = lName;
+        createUserName(this.fName, this.lName);
     }
 
     public String userName() {
-        return fName.toLowerCase().charAt(0) + lName.toLowerCase();
+        return userName;
     }
 
-    @Override
-    public User clone() {
-        return new UserFactory().createUser(this.fName, this.lName, this.roleName());
+    public String fName() {
+        return fName;
     }
+
+    public String lName() {
+        return lName;
+    }
+
+    public void setFirstName(String s) {
+        this.fName = s;
+    }
+
+    public void setLastName(String s) {
+        this.lName = s;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public abstract boolean isManager();
+
+    public abstract String roleName();
 
     @Override
     public boolean equals(Object o) {
@@ -62,7 +65,16 @@ public abstract class User implements Cloneable {
         return result;
     }
 
-    public abstract boolean isManager();
+    @Override
+    public User clone() {
+        return new UserFactory().createUser(this.fName, this.lName, this.roleName());
+    }
 
-    public abstract String roleName();
+    private void createUserName(String fname, String lname) {
+        if (StringUtils.isNoneBlank(fname, lname)) {
+            userName = fname.toLowerCase().charAt(0) + lname.toLowerCase();
+        } else {
+            throw new IllegalArgumentException("Unable to generate user name");
+        }
+    }
 }

@@ -10,14 +10,14 @@ class UserTest {
     @DisplayName("Regular user has the appropriate role")
     void userRoleName() {
         User u = new RegularUser("John", "Smith");
-        assertEquals(User.Role.STAFF.getRole(), u.roleName());
+        assertEquals(Role.STAFF.getRole(), u.roleName());
     }
 
     @Test
     @DisplayName("Management user has the appropriate role")
     void managerRoleName() {
         User u = new ManagementUser("John", "Smith");
-        assertEquals(User.Role.MANAGER.getRole(), u.roleName());
+        assertEquals(Role.MANAGER.getRole(), u.roleName());
     }
 
     @Test
