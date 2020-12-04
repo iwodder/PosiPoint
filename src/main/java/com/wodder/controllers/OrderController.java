@@ -11,7 +11,7 @@ import javax.swing.table.*;
 
 public class OrderController implements OrderObserver {
 
-    private OrderModel orderModel;
+    private final OrderModel orderModel;
     private OrderDisplay orderDisplay;
 
     public OrderController(OrderModel orderModel) {

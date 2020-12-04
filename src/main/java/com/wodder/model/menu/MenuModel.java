@@ -10,7 +10,6 @@ public class MenuModel implements MenuSubject {
     private final ArrayList<MenuItem> menuItems;
     private List<MenuObserver> observerList;
 
-
     public MenuModel() {
         menuItems = new ArrayList<>();
         observerList = new ArrayList<>();
@@ -20,8 +19,6 @@ public class MenuModel implements MenuSubject {
         menuItems.add(new MenuItem("Veggie Burger", "11.99"));
         menuItems.add(new MenuItem("Mushroom Swiss Burger", "12.99"));
     }
-
-
 
     public void addMenuItem(MenuItem mi) {
         menuItems.add(mi);
