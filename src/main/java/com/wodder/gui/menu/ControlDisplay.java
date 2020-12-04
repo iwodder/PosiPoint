@@ -37,7 +37,7 @@ public class ControlDisplay extends JTabbedPane implements MenuObserver {
 
     public void addMenuPanel() {
         String title = String.format("Menu Page #%d", (menuCnt + 1));
-        menuPanel = new MenuPanel(this.orderController);
+        menuPanel = new MenuPanel(this.orderController, this.systemController);
         menuPanelController.getInitialItems().forEachRemaining(this::addMenuItem);
         this.insertTab(title, null, menuPanel, null, menuCnt++);
     }

@@ -14,7 +14,7 @@ import java.util.*;
 public class SystemController implements UserObserver, ActionListener {
     private final SystemModel systemModel;
     private PosiPoint posiPoint;
-    private ControlDisplay controlDisplay;
+    private ControlDisplay controls;
     private final Timer logoutTimer;
     private final static int LOGOUT_DELAY_MS = 120_000;
 
@@ -28,7 +28,7 @@ public class SystemController implements UserObserver, ActionListener {
     }
 
     public void setMenuDisplay(ControlDisplay controlDisplay) {
-        this.controlDisplay = controlDisplay;
+        this.controls = controlDisplay;
     }
 
     public SystemModel getSystemModel() {
@@ -41,6 +41,10 @@ public class SystemController implements UserObserver, ActionListener {
         } else {
             posiPoint.displayLogin();
         }
+    }
+
+    public boolean userIsManager() {
+        return systemModel.userIsManager();
     }
 
     public void login(Credentials credentials) {
@@ -57,13 +61,13 @@ public class SystemController implements UserObserver, ActionListener {
 
     public void addUser(String fName, String lName, String password, String role) {
         systemModel.addUser(fName, lName, password, role);
-        controlDisplay.closeAddUserDialog();
+        controls.closeAddUserDialog();
     }
 
     @Override
     public void userLoggedOut() {
-        controlDisplay.removeManagerTab();
-        controlDisplay.inactivateMenuBtns();
+        controls.removeManagerTab();
+        controls.inactivateMenuBtns();
         posiPoint.displayLoggedOutMsg();
         posiPoint.displayLogin();
         logoutTimer.stop();
@@ -73,9 +77,9 @@ public class SystemController implements UserObserver, ActionListener {
     public void userLoggedIn(User user) {
         posiPoint.hideLogin();
         if (systemModel.userIsManager()) {
-            controlDisplay.addManagerTab();
+            controls.addManagerTab();
         }
-        controlDisplay.activateMenuBtns();
+        controls.activateMenuBtns();
         logoutTimer.start();
     }
 

@@ -5,11 +5,32 @@ public class MenuItem {
     private final String name;
     private String dollars;
     private String cents;
+    private boolean outOfStock;
 
     public MenuItem(String name, String price) {
         validateInput(name, price);
         this.name = name;
         setDollarsAndCents(price);
+    }
+
+    public String getPrice() {
+        return this.dollars + "." + this.cents;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setOutOfStock(boolean b) {
+        this.outOfStock = b;
+    }
+
+    public boolean isOutOfStock() {
+        return outOfStock;
+    }
+
+    public boolean isInStock() {
+        return !isOutOfStock();
     }
 
     private void validateInput(String name, String price) {
@@ -40,13 +61,5 @@ public class MenuItem {
         int decimal = price.indexOf('.');
         this.dollars = price.substring(0, decimal);
         this.cents = price.substring(++decimal);
-    }
-
-    public String getPrice() {
-        return this.dollars + "." + this.cents;
-    }
-
-    public String getName() {
-        return this.name;
     }
 }
